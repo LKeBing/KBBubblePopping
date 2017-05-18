@@ -306,7 +306,7 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
         }];
         // 首尾相连
         CGContextClosePath(contextRef);
-        // 设置为实心
+        // 设置实心
         CGContextFillPath(contextRef);
     }
 }
