@@ -115,5 +115,8 @@
     _textColor = textColor;
     self.label.textColor = textColor;
 }
-
+- (void)setTextAlignment:(NSTextAlignment)textAlignment {
+    _textAlignment = textAlignment;
+    self.label.textAlignment = textAlignment;
+}
 @end

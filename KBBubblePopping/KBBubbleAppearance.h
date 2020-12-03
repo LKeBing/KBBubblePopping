@@ -52,7 +52,6 @@
  */
 @property (nonatomic, assign) NSTimeInterval delayDuration;
 
-
 /**
  subContainer的摆放方向，分为横向摆放和纵向摆放
  */
@@ -68,13 +67,20 @@
  */
 @property (nonatomic, assign) CGSize itemViewSize;
 
-
+/**
+ 边框线条的宽度.默认0
+ */
+@property (nonatomic, assign) CGFloat lineWidth;
 
 /**
  UIImageView和UILabel的位置摆放方式，例如：图片在左文字在又，图片在上文字在下
  */
 @property (nonatomic, assign) ContentAlignment itemViewContentAlignment;
 
+/**
+ 文字摆放位置
+ */
+@property(nonatomic)        NSTextAlignment    itemTextAlignment;
 /**
  分割线的宽度
  */

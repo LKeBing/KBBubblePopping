@@ -56,6 +56,15 @@
  */
 @property (nonatomic, assign) NSTimeInterval delayDuration;
 
+/**
+ 边框线条的宽度.默认0
+ */
+@property (nonatomic, assign) CGFloat lineWidth;
+
+/**
+ 边框线条颜色
+ */
+@property (nonatomic, strong) UIColor *lineColor;
 
 /**
  弹出气泡
@@ -69,6 +78,12 @@
             contentSize:(CGSize)contentSize
               animation:(BOOL)animation
              completion:(void(^)(BOOL finished))completion;
+
+- (void)showAtSuperview:(UIView *)superview
+                  index:(NSInteger)index
+            contentSize:(CGSize)contentSize
+              animation:(BOOL)animation
+             completion:(void (^)(BOOL))completion;
 
 /**
  收回气泡

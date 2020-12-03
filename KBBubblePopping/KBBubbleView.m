@@ -8,7 +8,7 @@
 
 #import "KBBubbleView.h"
 
-#define DEGREES_TO_RADIANS(degrees)  ((3.14159265359*degrees)/180)
+#define KB_DEGREES_TO_RADIANS(degrees)  ((3.14159265359*degrees)/180)
 
 NSValue * pointValue(CGFloat x, CGFloat y) {
     NSValue *pointValue = [NSValue valueWithCGPoint:CGPointMake(x, y)];
@@ -34,12 +34,12 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
     
     self.contentSize = contentSize;
     [superview addSubview:self];
-    [self setNeedsLayout];
-    [self setNeedsDisplay];
+//    [self setNeedsLayout];
+//    [self setNeedsDisplay];
     
     if (animation) {
         self.alpha = 0.f;
-        self.superview.alpha = 0.f;
+//        self.superview.alpha = 0.f;
         self.transform = CGAffineTransformMakeScale(FLT_MIN, FLT_MIN);// 无限缩小
         [UIView animateWithDuration:self.animationDuration
                               delay:self.delayDuration
@@ -48,21 +48,59 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
                             options:(UIViewAnimationOptionCurveEaseInOut)
                          animations:^{
             self.alpha = 1.f;
-            self.superview.alpha = 1.f;
+//            self.superview.alpha = 1.f;
             self.transform = CGAffineTransformIdentity;// 还原比例
         } completion:^(BOOL completed){
             if (completion) completion(completed);
         }];
     } else {
         self.alpha = 1.f;
-        self.superview.alpha = 1.f;
+//        self.superview.alpha = 1.f;
         if (completion) completion(YES);
     }
 }
 
+- (void)showAtSuperview:(UIView *)superview index:(NSInteger)index contentSize:(CGSize)contentSize animation:(BOOL)animation completion:(void (^)(BOOL))completion {
+    if (self.superview) {
+        [self removeFromSuperview];
+    }
+    
+    self.contentSize = contentSize;
+    [superview insertSubview:self atIndex:index];
+    [self setNeedsLayout];
+    [self setNeedsDisplay];
+    
+    if (animation) {
+        self.alpha = 0.f;
+//        self.superview.alpha = 0.f;
+        self.transform = CGAffineTransformMakeScale(FLT_MIN, FLT_MIN);// 无限缩小
+        [UIView animateWithDuration:self.animationDuration
+                              delay:self.delayDuration
+             usingSpringWithDamping:0.6
+              initialSpringVelocity:1.5
+                            options:(UIViewAnimationOptionCurveEaseInOut)
+                         animations:^{
+                             self.alpha = 1.f;
+//                             self.superview.alpha = 1.f;
+                             self.transform = CGAffineTransformIdentity;// 还原比例
+                         } completion:^(BOOL completed){
+                             if (completion) completion(completed);
+                         }];
+    } else {
+        self.alpha = 1.f;
+//        self.superview.alpha = 1.f;
+        if (completion) completion(YES);
+    }
+}
+
+
 - (void)dismissWithAnimation:(BOOL)animation completion:(void (^)(BOOL))completion {
     if (self.superview == nil) {
         return;
+    }
+    
+    while (self.contentView.subviews.lastObject) {
+        [self.contentView.subviews.lastObject removeFromSuperview];
     }
     
     if (animation) {
@@ -71,7 +109,7 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
                             options:(UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState)
                          animations:^{
             self.alpha = 0.f;
-            self.superview.alpha = 0.f;
+//            self.superview.alpha = 0.f;
             self.transform = CGAffineTransformMakeScale(FLT_MIN, FLT_MIN);
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
@@ -79,7 +117,7 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
         }];
     } else {
         self.alpha = 0.f;
-        self.superview.alpha = 0.f;
+//        self.superview.alpha = 0.f;
         self.transform = CGAffineTransformMakeScale(FLT_MIN, FLT_MIN);
         [self removeFromSuperview];
         if (completion) completion(YES);
@@ -106,6 +144,8 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
         self.contentInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         self.animationDuration = 0.35;
         self.delayDuration = 0.f;
+        self.lineWidth = 0.f;
+        self.lineColor = [UIColor lightGrayColor];
         
         _contentView = [[UIView alloc] init];
         _contentView.backgroundColor = [UIColor clearColor];
@@ -182,7 +222,7 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
             selfHeight = self.contentSize.height + self.contentInsets.top + self.contentInsets.bottom + arrowHeight;
             arrowOffset = fminf(fmaxf(self.arrowOffset, 0.0), selfWidth);
             selfX = self.startPoint.x - arrowOffset;
-            selfY = self.startPoint.y;
+            selfY = self.startPoint.y-selfHeight;
             arrowX = arrowOffset;
             arrowY = selfHeight;
             anchorPoint = CGPointMake(arrowX / selfWidth, 1);
@@ -273,8 +313,8 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
     [super layoutSubviews];
 
     self.frame = self.selfFrame;
-    self.layer.position = self.startPoint;
-    self.layer.anchorPoint = self.anchorPoint;
+//    self.layer.position = self.startPoint;
+//    self.layer.anchorPoint = self.anchorPoint;
 }
 
 /**
@@ -288,7 +328,8 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
         // 获取上下文
         CGContextRef contextRef = UIGraphicsGetCurrentContext();
         CGContextSetFillColorWithColor(contextRef, self.fillColor.CGColor);
-        CGContextSetLineWidth(contextRef, 0);
+        CGContextSetLineWidth(contextRef, self.lineWidth);
+        CGContextSetStrokeColorWithColor(contextRef, self.lineColor.CGColor);
         // 起点
         CGContextMoveToPoint(contextRef, self.arrowPoint.x, self.arrowPoint.y);
         [self.points enumerateObjectsUsingBlock:^(NSArray * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -301,7 +342,7 @@ NSValue * pointValue(CGFloat x, CGFloat y) {
                 NSArray<NSNumber *> *degrees = [obj lastObject];
                 CGFloat degree1 = [[degrees firstObject] floatValue];
                 CGFloat degree2 = [[degrees lastObject] floatValue];
-                CGContextAddArc(contextRef, point.x, point.y, self.radius, DEGREES_TO_RADIANS(degree1), DEGREES_TO_RADIANS(degree2), 0);
+                CGContextAddArc(contextRef, point.x, point.y, self.radius, KB_DEGREES_TO_RADIANS(degree1), KB_DEGREES_TO_RADIANS(degree2), 0);
             }
         }];
         // 首尾相连

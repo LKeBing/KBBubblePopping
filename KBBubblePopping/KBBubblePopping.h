@@ -22,7 +22,7 @@
 - (void)showWithItems:(NSArray<KBBubbleItem *> *)items
               atPoint:(CGPoint)point
              animated:(BOOL)animated
-        selectedBlock:(void(^)(NSInteger index))selectedBlock;
+        selectedBlock:(void(^)(KBBubbleItem *item))selectedBlock;
 
 - (void)dismiss;
 

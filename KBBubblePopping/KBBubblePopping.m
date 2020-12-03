@@ -38,7 +38,7 @@
     return self;
 }
 
-- (void)showWithItems:(NSArray<KBBubbleItem *> *)items atPoint:(CGPoint)point animated:(BOOL)animated selectedBlock:(void (^)(NSInteger))selectedBlock {
+- (void)showWithItems:(NSArray<KBBubbleItem *> *)items atPoint:(CGPoint)point animated:(BOOL)animated selectedBlock:(void (^)(KBBubbleItem *))selectedBlock {
     
     // 透明的背景view
     UIView *window = [[UIApplication sharedApplication] keyWindow];
@@ -67,8 +67,12 @@
             itemView.imageCornerRadius = self.appearance.imageCornerRadius;
             itemView.textFont = self.appearance.textFont;
             itemView.textColor = self.appearance.textColor;
+            itemView.textAlignment = self.appearance.itemTextAlignment;
             itemView.didSelctedCompleted = ^(KBBubbleItemView *itemView) {
-                if (selectedBlock) selectedBlock([items objectAtIndex:idx].index);
+                if (selectedBlock) {
+                    selectedBlock([items objectAtIndex:idx]);
+                    [self dismiss];
+                }
             };
             [obj addSubview:itemView];
         }];
@@ -108,6 +112,7 @@
         self.bubble.animationDuration = self.appearance.animationDuration;
         self.bubble.delayDuration = self.appearance.delayDuration;
         self.bubble.backgroundColor = self.appearance.backgroundColor;
+        self.bubble.lineWidth = self.appearance.lineWidth;
         [self.bubble showAtSuperview:self.backgroundView contentSize:contentSize animation:YES completion:nil];
     }];
 }

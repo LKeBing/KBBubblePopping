@@ -54,6 +54,11 @@ typedef void(^DidSelctedCompletedBlock)(KBBubbleItemView *itemView);
 @property (nonatomic, strong) UIColor *textColor;
 
 /**
+ 文字摆放位置
+ */
+@property(nonatomic)        NSTextAlignment    textAlignment;
+
+/**
  itemView的点击事件
  */
 @property (nonatomic, copy) DidSelctedCompletedBlock didSelctedCompleted;

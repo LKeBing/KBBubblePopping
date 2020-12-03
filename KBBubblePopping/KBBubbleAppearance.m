@@ -24,7 +24,7 @@
         self.textFont = [UIFont systemFontOfSize:15.f];
         self.textColor = [UIColor whiteColor];
         self.separatorLineWidth = 1.f;
-        self.separatorLineColor = [UIColor grayColor];
+        self.separatorLineColor = [UIColor lightGrayColor];
         self.itemViewSize = CGSizeMake(150, 40);
         self.itemViewPadding = 5.f;
         self.itemViewContentEdgeMargin = 0.f;
@@ -33,6 +33,7 @@
         self.imageCornerRadius = 0.f;
         self.animationDuration = 0.35;
         self.delayDuration = 0.f;
+        self.lineWidth = 0.f;
     }
     return self;
 }
