@@ -18,12 +18,12 @@
         self.edgeMargin = 10.f;
         self.radius = 8.f;
         self.arrowSize = CGSizeMake(8.f, 8.f);
-        self.backgroundColor = [UIColor redColor];
+        self.backgroundColor = [UIColor whiteColor];
         self.itemViewPutDirection = KBBubbleViewSubContainerPutDirectionVertical;
         self.itemViewContentAlignment = ContentAlignmentHorizontal;
         self.textFont = [UIFont systemFontOfSize:15.f];
-        self.textColor = [UIColor whiteColor];
-        self.separatorLineWidth = 1.f;
+        self.textColor = [UIColor blackColor];
+        self.separatorLineWidth = 0.5f;
         self.separatorLineColor = [UIColor lightGrayColor];
         self.itemViewSize = CGSizeMake(150, 40);
         self.itemViewPadding = 5.f;
